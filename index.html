@@ -11,7 +11,6 @@ and open the template in the editor.
     </head>
     <body>
         <button onclick="transporte()">IDA</button>
-
        <script>
            function transporte(){
                location.replace("http://localhost:8080/client/detalles.html?id="+document.getElementById("customerid").value);
@@ -51,19 +50,21 @@ and open the template in the editor.
                         let tdEmail = document.createElement('td');
                         let tdId = document.createElement('td');
                         let tdCPostal = document.createElement('td');
-                        
+                        let tdfecha = document.createElement('td');
                         tdNombre.innerHTML += item.nombre;
                         tdCiudad.innerHTML += item.ciudad;
                         tdEmail.innerHTML += item.email;
                         tdId.innerHTML += item.id;
                         tdCPostal.innerHTML += item.cpostal;
                         
+                        tdfecha.innerHTML += item.fecha;
+                        
                         tr.appendChild(tdNombre);
                         tr.appendChild(tdCiudad);
                         tr.appendChild(tdEmail);
                         tr.appendChild(tdId);
                         tr.appendChild(tdCPostal);
-                        
+                        tr.appendChild(tdfecha);
                         table.appendChild(tr);
                         
                     });
@@ -87,7 +88,14 @@ and open the template in the editor.
                    document.getElementById('name').value = texto.nombre;
                    document.getElementById('address').value = texto.ciudad;
                    document.getElementById('email').value = texto.email;
-                }
+                                      
+
+                   if (texto.fecha != undefined){
+                   document.getElementById('fecha').value = texto.fecha.toString().substring(0,10);
+               } else {
+                   document.getElementById('fecha').value = undefined;
+               }
+        }
                 
                 /* //XML
                     var xmlDoc = xhttp.responseXML;
@@ -107,7 +115,13 @@ and open the template in the editor.
                 var nombre = document.getElementById('name').value;
                 var ciudad = document.getElementById('address').value;
                 var email = document.getElementById('email').value;
-                var texto = '{"ciudad":"'+ciudad+'","email":"'+email+'","nombre":"'+nombre+'"}';
+                
+                let fecha = document.getElementById('fecha').value;
+                fecha += "T00:00:00Z[UTC]";    
+                    
+
+
+                var texto = '{"ciudad":"'+ciudad+'","email":"'+email+'","nombre":"'+nombre+'","fecha":"'+fecha+'"}';
                 var url = "http://localhost:8080/MiServidor/webresources/entity.clientes/";
                 xhttp.open("POST", url, true);
                 xhttp.setRequestHeader("Accept","application/json");
@@ -123,6 +137,9 @@ and open the template in the editor.
                 data.nombre = document.getElementById('name').value;
                 data.ciudad = document.getElementById('address').value;
                 data.email = document.getElementById('email').value;
+                data.fecha = document.getElementById('fecha').value;
+                data.fecha+="T00:00:00Z[UTC]";    
+
                 var json = JSON.stringify(data);
                 var url = "http://localhost:8080/MiServidor/webresources/entity.clientes/"+data.id;
                 xhttp.open("PUT", url, true);
@@ -173,6 +190,11 @@ and open the template in the editor.
                     <input type="button" value="Borrar datos" onclick="deleteMessage()"/>
                     </td>
                 </tr>
+                <tr>
+                    <td>Fecha</td>
+                    <td><input type="date" data-date-format="DD MMMM YYYY" id="fecha" />
+                    </td>
+                </tr>
             </tbody>
         </table>
         <table border="1" id="myItemList">
@@ -183,6 +205,7 @@ and open the template in the editor.
                     <th>Email</th>
                     <th>Id</th>
                     <th>CPostal</th>
+                    <th>Fecha</th>
                 </tr>
             </thead>
             <tbody>
