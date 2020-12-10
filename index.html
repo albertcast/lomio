@@ -8,10 +8,16 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      
     </head>
     <body>
+        <button onclick="transporte()">IDA</button>
+
        <script>
+           function transporte(){
+               location.replace("http://localhost:8080/client/detalles.html?id="+document.getElementById("customerid").value);
+           }
+           
+           
             var xhttp;
             function createConnection() {
                 xhttp = new XMLHttpRequest();
@@ -82,6 +88,18 @@ and open the template in the editor.
                    document.getElementById('address').value = texto.ciudad;
                    document.getElementById('email').value = texto.email;
                 }
+                
+                /* //XML
+                    var xmlDoc = xhttp.responseXML;
+                    var id = xmlDoc.getElementsByTagName("id");
+                    var apellido1 = xmlDoc.getElementsByTagName("apellido1");
+                    var apellido2 = xmlDoc.getElementsByTagName("apellido2");
+                    var nombre = xmlDoc.getElementsByTagName("nombre");
+                    var nombreusuario = xmlDoc.getElementsByTagName("nombreusuario");
+                    var fechanacimiento= xmlDoc.getElementsByTagName("fechanacimiento");
+                    var fecharegistro = xmlDoc.getElementsByTagName("fecharegistro");
+                    var biografia = xmlDoc.getElementsByTagName("biografia");*/
+                
             }
            
             function postMessage(){
