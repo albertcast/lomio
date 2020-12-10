@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Flickr JSON</title>
+  </head>
+<body>
+    <div>
+    <input type="text" id="tag"></input>
+    <button onclick="cambiarTag()">Boton</button>
+    </div>
+  <script>
+      function cambiarTag(){
+          tag = document.getElementById("tag").value;
+          var source="http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=5da1b1c2154ae1cf850796f94e1025c9&tags=" + tag + "&per_page=50&format=json";
+          document.write("<script type='text/javascript' src='"+ source + "'><\/script>");
+      }
+      
+      window.onload = function(){
+        let a = '<button onclick="volver()">Volver</button> <input type="text" id="tag"></input>    <button onclick="cambiarTag()">Boton</button>';
+        document.write(a);
+      };
+      
+      function volver(){
+          location.replace("http://localhost:8080/client/")
+      }
+      
+  function jsonFlickrApi(rsp) {
+    window.rsp = rsp;
+    
+    
+    var s = '';
+    // http://farm{id}.static.flickr.com/{server-id}/{id}_{secret}_[mstb].jpg
+    // http://www.flickr.com/photos/jenyplante/3446613250
+    
+    for (var i=0; i < rsp.photos.photo.length; i++) {
+      photo = rsp.photos.photo[i];
+      t_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
+        photo.server + "/" + photo.id + "_" + photo.secret + "_" + "t.jpg";
+      p_url = "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id;
+      s +=  '<a id="flickr" href="' + p_url + '">' + '<img alt="'+ photo.title + 
+        '"src="' + t_url + '"/>' + '</a>' + '</div>';
+    }
+    document.writeln(s);
+   
+   
+  }
+  </script>
+   
+</body>
+    
+</html>
+
+
+

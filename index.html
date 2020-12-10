@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+    </head>
+    <body>
+       <script>
+            var xhttp;
+            function createConnection() {
+                xhttp = new XMLHttpRequest();
+            }
+            
+            function getAll(){
+                xhttp = new XMLHttpRequest();
+                var url = "http://localhost:8080/MiServidor/webresources/entity.clientes/";
+                xhttp.onreadystatechange = handlerino;
+                xhttp.open("GET",url,true);
+                xhttp.setRequestHeader("Accept","application/json");
+                xhttp.send(null);
+                
+            }
+            
+            function handlerino(){
+                if(xhttp.readyState == 4 && xhttp.status ==200){
+                    var lista = JSON.parse(xhttp.responseText);
+                    table = document.getElementById('myItemList').getElementsByTagName("tbody")[0];
+                    
+                    while(table.hasChildNodes()){
+                        
+                        table.removeChild(table.firstChild);
+                    }
+
+                    lista.forEach(function(item){
+                        
+                        let tr = document.createElement('tr');
+                        let tdNombre = document.createElement('td');
+                        let tdCiudad = document.createElement('td');
+                        let tdEmail = document.createElement('td');
+                        let tdId = document.createElement('td');
+                        let tdCPostal = document.createElement('td');
+                        
+                        tdNombre.innerHTML += item.nombre;
+                        tdCiudad.innerHTML += item.ciudad;
+                        tdEmail.innerHTML += item.email;
+                        tdId.innerHTML += item.id;
+                        tdCPostal.innerHTML += item.cpostal;
+                        
+                        tr.appendChild(tdNombre);
+                        tr.appendChild(tdCiudad);
+                        tr.appendChild(tdEmail);
+                        tr.appendChild(tdId);
+                        tr.appendChild(tdCPostal);
+                        
+                        table.appendChild(tr);
+                        
+                    });
+                }
+            }
+            
+            function getMessage() {
+                createConnection();
+                xhttp.onreadystatechange = handleResponse;
+                var id = document.getElementById("customerid").value;
+                var url = "http://localhost:8080/MiServidor/webresources/entity.clientes/" + id;
+                console.log(url);
+                xhttp.open("GET", url, true);
+                xhttp.setRequestHeader("Accept", "application/json");
+                xhttp.send(null);
+            }
+            function handleResponse() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                   var texto = JSON.parse(xhttp.responseText);
+                   document.getElementById('customerid').value = texto.id;
+                   document.getElementById('name').value = texto.nombre;
+                   document.getElementById('address').value = texto.ciudad;
+                   document.getElementById('email').value = texto.email;
+                }
+            }
+           
+            function postMessage(){
+                xhttp = new XMLHttpRequest();
+                var nombre = document.getElementById('name').value;
+                var ciudad = document.getElementById('address').value;
+                var email = document.getElementById('email').value;
+                var texto = '{"ciudad":"'+ciudad+'","email":"'+email+'","nombre":"'+nombre+'"}';
+                var url = "http://localhost:8080/MiServidor/webresources/entity.clientes/";
+                xhttp.open("POST", url, true);
+                xhttp.setRequestHeader("Accept","application/json");
+                xhttp.setRequestHeader("Content-type","application/json");
+                xhttp.send(texto); 
+            }
+           
+           function putMessage(){
+                xhttp = new XMLHttpRequest();
+                
+                var data = {};
+                data.id = document.getElementById("customerid").value;
+                data.nombre = document.getElementById('name').value;
+                data.ciudad = document.getElementById('address').value;
+                data.email = document.getElementById('email').value;
+                var json = JSON.stringify(data);
+                var url = "http://localhost:8080/MiServidor/webresources/entity.clientes/"+data.id;
+                xhttp.open("PUT", url, true);
+                xhttp.setRequestHeader("Accept","application/json");
+                xhttp.setRequestHeader("Content-type","application/json");
+
+                console.log(json);
+                xhttp.send(json);
+            }
+            
+            function deleteMessage(){
+                xhttp = new XMLHttpRequest();
+                var id = document.getElementById("customerid").value;
+                var url = "http://localhost:8080/MiServidor/webresources/entity.clientes/"+id;
+                xhttp.open("DELETE", url, true);
+                xhttp.setRequestHeader("Accept","application/json");
+                xhttp.send(null);
+            }
+            
+            
+            
+            
+        </script>
+    
+        <table border="1">
+            <tbody>
+                <tr>
+                    <td>Enter Customer ID :</td>
+                    <td><input type="text" id="customerid" size="10"/>
+                        <input type="button" value="Obtener datos" onclick="getMessage()"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td><input type="text" id="name" size="10"/>
+                        <input type="button" value="Introducir datos" onclick="postMessage()"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Address Line</td>
+                    <td><input type="text" id="address" size="10"/>
+                        <input type="button" value="Modificar datos" onclick="putMessage()"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><input type="text" id="email" size="10"/>
+                    <input type="button" value="Borrar datos" onclick="deleteMessage()"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table border="1" id="myItemList">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Ciudad</th>
+                    <th>Email</th>
+                    <th>Id</th>
+                    <th>CPostal</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button onclick="getAll()">TODO GET</button>
+        <ul id="myItemList"></ul>
+        
+        <button onclick="mapa()">Boton</button>
+        <button onclick="flickr()">Boton</button>
+        
+        <script>
+            function mapa(){
+                location.replace("http://localhost:8080/client/mapa.html");  
+            }
+            function flickr(){
+                location.replace("http://localhost:8080/client/flickr.html");  
+            }
+            
+            
+            
+            
+        </script>
+        
+    </body>
+</html>
