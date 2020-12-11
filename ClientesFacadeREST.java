@@ -57,7 +57,7 @@ public class ClientesFacadeREST extends AbstractFacade<Clientes> {
     }
 
     
-@GET
+    @GET
     @Path("{id}")
     public Clientes find(@PathParam("id") Integer id) {
         return super.find(id);
@@ -75,6 +75,14 @@ public class ClientesFacadeREST extends AbstractFacade<Clientes> {
         
         List<Clientes> lista = q.getResultList();
         return lista;
+    }
+    
+    @PUT
+    @Path("name/{name}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void editByName(@PathParam("name") String name, Clientes entity) {
+        Query q = em.createNamedQuery("Clientes.findByNombre");
+        q.setParameter("nombre", name);
     }
     
     @GET
